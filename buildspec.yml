@@ -1,0 +1,28 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install -t lib
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the dist folder
+      - cd lib
+      #- zip -r ../deployment_package.zip .
+      - zip function.zip index.js
+      - cd ..
+      #- zip -g deployment_package.zip index.js
+      - 
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo updating lambda function...
+      #- aws lambda update-function-code --function-name WeatherHistory --zip-file fileb://deployment_package.zip
+      - aws lambda update-function-code --function-name WeatherNodeApp --zip-file fileb://function.zip
+      - echo Done
+# Include only the files required for your application to run.
+artifacts:
+  files:
+      - '**/*'
